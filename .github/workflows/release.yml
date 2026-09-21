@@ -36,7 +36,8 @@ jobs:
       - name: Create pacman repo database
         run: |
           mkdir -p repo
-          repo-add repo/poopascii.db poopascii-*.pkg.tar.zst
+          repo-add repo/poopascii.db.tar.gz poopascii-*.pkg.tar.zst
+          rm -f repo/poopascii.db.tar.gz repo/poopascii.files.tar.gz
           cp poopascii-*.pkg.tar.zst repo/
 
       - name: Setup Pages
