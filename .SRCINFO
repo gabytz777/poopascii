@@ -1,0 +1,15 @@
+pkgbase = poopascii
+	pkgdesc = Print beautiful terminal ASCII art
+	pkgver = 1.0
+	pkgrel = 1
+	url = https://aur.archlinux.org/poopascii
+	arch = any
+	license = MIT
+	source = poop
+	source = poop.txt
+	source = LICENSE
+	sha256sums = 5af288c7cbd2fe0148e7ad147ff903b7e0d3c4aa993f08e07965202963a83c6b
+	sha256sums = 3fd2e3a6359486fa883faf06ba6675dcfbeaea01e359d6a68daef2408ccc861f
+	sha256sums = c4401fdd8e3a1113ad7f1059ba2d3743a5b5ada25ba2dac9f85320d2e821e877
+
+pkgname = poopascii
