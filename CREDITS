@@ -1,0 +1,54 @@
+Credits
+=======
+
+Art in art/poop.txt is the original piece shipped with poopascii and is covered
+by the MIT license in LICENSE (Copyright (c) 2026 gabytz777).
+
+All other files in art/ come from the community ASCII art collection at
+
+    https://github.com/joeky888/ASCII-Art-collection
+
+which does not state a license. The pieces are reproduced here verbatim except
+for these mechanical cleanups, applied by the poopascii maintainer:
+
+  * trailing whitespace was stripped from every line
+  * leading/trailing blank lines were removed
+  * "See ... for more" cross references to other files of that collection were
+    removed, since those files are not shipped here
+  * lines consisting only of the word "unknown" (a placeholder the original
+    collection used for a missing artist name) were removed
+  * two stray non-ASCII decorative bytes were replaced with ASCII look-alikes
+    (0xb4 -> ' in elephant, 0xa0 -> space in sailboat)
+
+Artist signatures and "From:" attribution lines inside the art were kept as is.
+
+Mapping of collection file to shipped file:
+
+    pqr/poop.txt          art/poop-pile.txt
+    s/shit.txt            art/shit.txt
+    c/crap.txt            art/crap.txt
+    def/fart.txt          art/fart.txt
+    ab/ass.txt            art/ass.txt
+    t/toiletpaper.txt     art/toilet-paper.txt
+    pqr/pig.txt           art/pig.txt
+    def/elephant.txt      art/elephant.txt
+    uvw/whale.txt         art/whale.txt
+    jkl/jellyfish.txt     art/jellyfish.txt
+    mno/octopus.txt       art/octopus.txt
+    def/dinosaur.txt      art/dinosaur.txt
+    def/flamingo.txt      art/flamingo.txt
+    ab/bunny.txt          art/bunny.txt
+    ghi/ghost.txt         art/ghost.txt
+    ab/alien.txt          art/alien.txt
+    pqr/pizza.txt         art/pizza.txt
+    def/donut.txt         art/donut.txt
+    mno/mushroom.txt      art/mushroom.txt
+    c/coffee.txt          art/coffee.txt
+    c/cake.txt            art/cake.txt
+    pqr/rockets.txt       art/rockets.txt
+    s/sailboat.txt        art/sailboat.txt
+    jkl/keyboard.txt      art/keyboard.txt
+    s/skyscraper.txt      art/skyscraper.txt
+
+The individual pieces remain the work of their original ASCII artists, whose
+signatures are preserved in the art files themselves.

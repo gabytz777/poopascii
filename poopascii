@@ -1,0 +1,154 @@
+#!/bin/sh
+# poopascii - print beautiful terminal ASCII art
+#
+# Usage: poopascii [-r|--random] [-a|--all] [-l|--list] [-h|--help] [name]
+
+set -u
+
+PROG=${0##*/}
+DEFAULT_ART=poop
+
+die() {
+    printf '%s: %s\n' "$PROG" "$1" >&2
+    exit "${2:-1}"
+}
+
+script_dir=$(CDPATH='' cd -- "$(dirname -- "$0")" 2>/dev/null && pwd) || script_dir=.
+
+if [ -n "${POOPASCII_ART_DIR:-}" ]; then
+    art_dir=$POOPASCII_ART_DIR
+elif [ -d "$script_dir/art" ]; then
+    art_dir=$script_dir/art
+else
+    art_dir=/usr/share/poopascii/art
+fi
+
+[ -d "$art_dir" ] || die "art directory not found: $art_dir" 1
+
+usage() {
+    cat <<EOF
+usage: $PROG [option] [name]
+
+  no option       print the classic $DEFAULT_ART art
+  -r, --random    print a random piece of art
+  -a, --all       print every piece of art
+  -l, --list      list the names of the available art
+  -h, --help      show this help
+
+The art name is the file name without the .txt suffix, e.g. "$PROG whale".
+Set POOPASCII_ART_DIR to use a custom art collection.
+EOF
+}
+
+# Sorted list of available art names, one per line.
+art_names() {
+    for f in "$art_dir"/*.txt; do
+        [ -f "$f" ] || continue
+        n=${f##*/}
+        printf '%s\n' "${n%.txt}"
+    done
+}
+
+# Resolve a user supplied name to a file path. Accepts an optional .txt
+# suffix and ignores surrounding whitespace. Prints the path on stdout.
+resolve() {
+    _name=$1
+    case $_name in
+        *.txt) _path=$art_dir/$_name ;;
+        *)     _path=$art_dir/$_name.txt ;;
+    esac
+    if [ -f "$_path" ]; then
+        printf '%s\n' "$_path"
+        return 0
+    fi
+    return 1
+}
+
+print_art() {
+    cat -- "$1"
+}
+
+list_art() {
+    art_names
+}
+
+print_random() {
+    # Seed from the pid and the clock so consecutive calls differ.
+    _seed="$$-$(date +%s 2>/dev/null || echo 0)"
+    _art=$(art_names | awk -v seed="$_seed" '
+        BEGIN { srand(seed + 0) }
+        { a[NR] = $0 }
+        END { print a[int(rand() * NR) + 1] }
+    ')
+    [ -n "$_art" ] || die "no art available in $art_dir"
+    print_art "$art_dir/$_art.txt"
+}
+
+print_all() {
+    for n in $(art_names); do
+        printf '==> %s <==\n' "$n"
+        print_art "$art_dir/$n.txt"
+        printf '\n'
+    done
+}
+
+random=0
+all=0
+list=0
+name=
+
+while [ $# -gt 0 ]; do
+    case $1 in
+        -r|--random) random=1 ;;
+        -a|--all)    all=1 ;;
+        -l|--list)   list=1 ;;
+        -h|--help)   usage; exit 0 ;;
+        --)          shift; break ;;
+        -*)          usage >&2; die "unknown option: $1" 2 ;;
+        *)           name=$1 ;;
+    esac
+    shift
+done
+
+if [ $# -gt 0 ]; then
+    name=$1
+    shift
+fi
+
+if [ $# -gt 0 ]; then
+    usage >&2
+    die "too many arguments"
+fi
+
+if [ "$all" -eq 1 ]; then
+    print_all
+    exit 0
+fi
+
+if [ "$list" -eq 1 ]; then
+    list_art
+    exit 0
+fi
+
+if [ "$random" -eq 1 ]; then
+    print_random
+    exit 0
+fi
+
+if [ -z "$name" ]; then
+    name=$DEFAULT_ART
+fi
+
+if art_path=$(resolve "$name"); then
+    print_art "$art_path"
+    exit 0
+fi
+
+# Not an exact match: try a case insensitive match before giving up.
+lc_name=$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')
+lc_path=$(resolve "$lc_name") || {
+    printf '%s: no art named "%s"\n' "$PROG" "$name" >&2
+    printf 'Try %s --list to see the available art.\n' "$PROG" >&2
+    exit 1
+}
+print_art "$lc_path"
